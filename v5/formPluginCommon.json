@@ -1,0 +1,58 @@
+{
+  "grid": [
+    { "id": "p1", "xs": 12, "class": "main", "table": "units" },
+    { "id": "p2", "xs": 12, "class": "main", "table": "unitsTreeTable", "height": "fill" }
+  ],
+
+  "spacing": 10,
+  "breadcrumbs": { "tree": "plugins" },
+  "p1": [
+    {
+      "prop": "token",
+      "title": "$Token",
+      "type": "input"
+    },
+    {
+      "prop": "proxy",
+      "title": "$Proxy",
+      "type": "droplist",
+      "data": [
+        {
+          "id": "disabled",
+          "title": "$Disabled"
+        },
+        {
+          "id": "manual",
+          "title": "$Manual"
+        },
+        {
+          "id": "auto",
+          "title": "$_Auto"
+        }
+      ]
+    },
+    {
+      "prop": "HTTPProxy",
+      "title": "$HTTPProxy",
+      "type": "input",
+      "hide": "data.p1.proxy.id !== 'manual'",
+      "default": "127.0.0.1:8123"
+    }
+  ],
+  "p2": [
+    {
+      "title": "",
+      "type": "table",
+      "prop": "unitsTreeTable",
+
+      "columns": [
+        { "prop": "name", "title": "ID", "type": "text", "width": 150 },
+        { "prop": "state", "title": "Состояние", "type": "text", "width": 150 },
+        { "prop": "laststart", "title": "Время запуска", "type": "text", "width": 150 },
+        { "prop": "laststop", "title": "Время останова", "type": "text", "width": 150 },
+        { "prop": "uptime", "title": "Uptime", "type": "text", "width": 150 },
+        { "prop": "error", "title": "Ошибка", "type": "text", "width": 250 }
+      ]
+    }
+  ]
+}

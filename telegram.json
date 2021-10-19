@@ -1,0 +1,16 @@
+{
+  "id": "telegram",
+  "description": "Telegram plugin",
+  "module": "index.js",
+  "gendevices": 0,
+  "service": "info",
+  "single": 1,
+  "restartOnChannelsChange": 1,
+  "chdefault": {
+    "r": true,
+    "w": true,
+    "chan": "incoming_message_1"
+  },
+  "ext": [
+  ]
+}
