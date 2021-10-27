@@ -5,20 +5,11 @@ const Telegram = require('./lib/telegram');
 
 let telegram = null;
 
+let opt = {};
 let settings = {};
 let users = {};
 let channels = [];
 
-function sendProcessInfo() {
-  const mu = process.memoryUsage();
-  const memrss = Math.floor(mu.rss / 1024);
-  const memheap = Math.floor(mu.heapTotal / 1024);
-  const memhuse = Math.floor(mu.heapUsed / 1024);
-
-  const data = { memrss, memheap, memhuse };
-
-  process.send({ type: 'procinfo', data });
-}
 
 function telegram_debug(msg) {
   plugin.log(msg);
@@ -44,21 +35,12 @@ function telegram_message({ from, text }) {
 }
 
 async function main() {
-  let opt;
-  try {
-    opt = JSON.parse(process.argv[2]);
-  } catch (e) {
-    opt = {};
-  }
+  opt = plugin.opt;
+  settings = await plugin.params.get();
+  channels = await plugin.channels.get();
 
-  const logfile = opt.logfile || path.join(__dirname, 'ih_telegram.log');
-  const loglevel = opt.loglevel || 0;
-
-  logger.start(logfile, loglevel);
-  logger.log('Plugin telegram has started  with args: ' + process.argv[2]);
-
-  setInterval(sendProcessInfo, 10000);
-
+  process.send({ type: 'sub', id: opt.id, event: 'sendinfo', filter: { type: opt.id } });
+  process.send({ type: 'get', tablename: 'infousers' });
 
   process.on('message', msg => {
     if (typeof msg === 'object' && msg.type === 'sub' && msg.data !== undefined) {
@@ -78,18 +60,9 @@ async function main() {
     }
   });
 
-
-  process.send({ 
-    type: 'sub',
-    id: opt.id,
-    event: 'sendinfo',
-    filter: { type: opt.id }
+  plugin.onChange('infousers', data => {
+    process.exit(0);
   });
-
-  process.send({ type: 'get', tablename: 'infousers' });
-
-  settings = await plugin.params.get();
-  channels = await plugin.channels.get();
 
   telegram = new Telegram({ token: settings.token, proxy: settings.proxy === 'manual' ? settings.HTTPProxy : (settings.proxy ? settings.proxy : 'disabled') });
   
