@@ -54,12 +54,13 @@ async function main() {
     }
 
     if (typeof msg === 'object' && msg.type === 'get' && msg.infousers !== undefined) {
+      users = {};
       msg.infousers.forEach(i => { users[i.addr] = true });
     }
   });
 
   plugin.onChange('infousers', data => {
-    process.exit(0);
+    process.send({ type: 'get', tablename: 'infousers' });
   });
 
   telegram = new Telegram({ token: settings.token, proxy: settings.proxy === 'manual' ? settings.HTTPProxy : (settings.proxy ? settings.proxy : 'disabled') });
