@@ -1,6 +1,4 @@
 const plugin = require('ih-plugin-api')();
-
-const logger = require('./lib/logger');
 const Telegram = require('./lib/telegram');
 
 let telegram = null;
