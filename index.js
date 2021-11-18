@@ -63,6 +63,10 @@ async function main() {
     process.send({ type: 'get', tablename: 'infousers' });
   });
 
+  plugin.onChange('params', data => {
+    process.exit(0);
+  });
+
   telegram = new Telegram({ token: settings.token, proxy: settings.proxy === 'manual' ? settings.HTTPProxy : (settings.proxy ? settings.proxy : 'disabled') });
   
   telegram.on('debug', telegram_debug);
