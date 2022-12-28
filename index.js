@@ -1,6 +1,7 @@
-const plugin = require('ih-plugin-api')();
+
 const Telegram = require('./lib/telegram');
 
+let plugin;
 let telegram = null;
 
 let opt = {};
@@ -33,6 +34,17 @@ function telegram_message({ from, text }) {
 }
 
 async function main() {
+
+  try {
+    const argv = JSON.parse(process.argv[2]); //
+    const pluginapi = argv && argv.pluginapi ? argv.pluginapi : 'ih-plugin-api';
+   
+    plugin = require(pluginapi+'/index.js')();
+  } catch (e) {
+    console.log('ERROR: Missing or invalid pluginapi path')
+    process.exit(1);
+  }
+
   opt = plugin.opt;
   settings = await plugin.params.get();
   channels = await plugin.channels.get();
