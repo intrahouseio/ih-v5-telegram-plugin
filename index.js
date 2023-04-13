@@ -55,12 +55,15 @@ async function main() {
   process.on('message', msg => {
     if (typeof msg === 'object' && msg.type === 'sub' && msg.data !== undefined) {
       msg.data.sendTo.forEach(user => {
-        if (msg.data.img === undefined) {
+        if (msg.data.img === undefined && msg.data.pdf === undefined) {
           plugin.log(`send_txt -> id:${user.addr}, text:${msg.data.txt}`)
           telegram.sendText(user.addr, msg.data.txt);
-        } else {
+        } else  if (msg.data.pdf === undefined) {
           plugin.log(`send_img -> id:${user.addr}, text:${msg.data.txt}`)
           telegram.sendImg(user.addr, msg.data.img, msg.data.txt);
+        } else if (msg.data.img === undefined) {
+          plugin.log(`send_pdf -> id:${user.addr}, text:${msg.data.txt}}`)
+          telegram.sendPdf(user.addr, msg.data.pdf, msg.data.txt);
         }
       });
     }
